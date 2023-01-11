@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import bckgImg from '../images/login-background.jpg';
 import logo1 from '../images/cta-logo-one.svg';
-
+import logo2 from '../images/cta-logo-two.png';
 const Login = (props) => {
 	return (<Container>
 		<Content>
@@ -13,6 +13,7 @@ const Login = (props) => {
 					with a Disney+ subscription. As of 03/26/21, the price of Disney+
 					and The Disney Bundle will increase by $1.
 				</Desription>
+				<CTALogoTwo src={logo2} />
 			</CTA>
 			<BackgroundImage />
 		</Content>
@@ -97,4 +98,13 @@ margin: 0 0 24px;
 line-height: 1.5;
 letter-spacing: 1.5px
 `;
+
+const CTALogoTwo = styled.img`
+max-width: 600px;
+margin-bottom: 20px;
+display: inline-block;
+vertical-align: bottom;
+width: 100%;
+`;
+
 export default Login
