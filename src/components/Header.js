@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components';
 
+import { auth, provider, signInWithPopup } from '../firebase';
+
 import logo from '../images/logo.svg';
 import home from '../images/home-icon.svg';
 import search from '../images/search-icon.svg';
@@ -10,6 +12,13 @@ import movie from '../images/movie-icon.svg';
 import series from '../images/series-icon.svg';
 
 const Header = props => {
+	const handleAuth = () => {
+		signInWithPopup(auth, provider).then(result => {
+			console.log(result);
+		}).catch(err => {
+			console.error(err);
+		});
+	}
 	return (
 		<Nav>
 			<Logo>
@@ -42,7 +51,7 @@ const Header = props => {
 				</a>
 
 			</NavMenu>
-			<Login>login</Login>
+			<Login onClick={handleAuth}>login</Login>
 		</Nav >
 	)
 }
