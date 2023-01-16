@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails }
+	from '../features/user/userSlice';
 import { auth, provider, signInWithPopup } from '../firebase';
 
 import logo from '../images/logo.svg';
@@ -11,47 +13,72 @@ import original from '../images/original-icon.svg';
 import movie from '../images/movie-icon.svg';
 import series from '../images/series-icon.svg';
 
+
 const Header = props => {
+
+	const user = useSelector(state => state.user);
+	const userName = useSelector(selectUserName);
+	const email = useSelector(selectUserEmail);
+	const photo = useSelector(selectUserPhoto);
+
+	const dispatch = useDispatch();
+
 	const handleAuth = () => {
 		signInWithPopup(auth, provider).then(result => {
-			console.log(result);
+			setUser(result.user)
 		}).catch(err => {
 			console.error(err);
 		});
+	}
+
+	const setUser = user => {
+		dispatch(setUserLoginDetails({
+			name: user.displayName,
+			email: user.email,
+			photo: user.photoURL,
+		})
+		);
 	}
 	return (
 		<Nav>
 			<Logo>
 				<img src={logo} alt="disney" />
 			</Logo>
-			<NavMenu>
-				<a>
-					<img src={home} alt="HOME" />
-					<span>Home</span>
-				</a>
-				<a>
-					<img src={search} alt="SEARCH" />
-					<span>SEARCH</span>
-				</a>
-				<a>
-					<img src={watchlist} alt="WATCHLIST" />
-					<span>WATCHLIST</span>
-				</a>
-				<a>
-					<img src={original} alt="ORIGINALS" />
-					<span>ORIGINALS</span>
-				</a>
-				<a>
-					<img src={movie} alt="MOVIES" />
-					<span>MOVIES</span>
-				</a>
-				<a>
-					<img src={series} alt="SERIES" />
-					<span>SERIES</span>
-				</a>
 
-			</NavMenu>
-			<Login onClick={handleAuth}>login</Login>
+			{
+				!userName ? (<Login onClick={handleAuth}>login</Login>) :
+					<Fragment>
+						<NavMenu>
+							<a>
+								<img src={home} alt="HOME" />
+								<span>Home</span>
+							</a>
+							<a>
+								<img src={search} alt="SEARCH" />
+								<span>SEARCH</span>
+							</a>
+							<a>
+								<img src={watchlist} alt="WATCHLIST" />
+								<span>WATCHLIST</span>
+							</a>
+							<a>
+								<img src={original} alt="ORIGINALS" />
+								<span>ORIGINALS</span>
+							</a>
+							<a>
+								<img src={movie} alt="MOVIES" />
+								<span>MOVIES</span>
+							</a>
+							<a>
+								<img src={series} alt="SERIES" />
+								<span>SERIES</span>
+							</a>
+
+						</NavMenu>
+						<UserImg src={photo}></UserImg >
+					</Fragment>
+			}
+
 		</Nav >
 	)
 }
@@ -161,6 +188,10 @@ transition: all 0.2s ease 0s;
 	color: #000;
 	border-color: transparent;
 }
+
+`;
+const UserImg = styled.img`
+height: 100%;
 
 `;
 
