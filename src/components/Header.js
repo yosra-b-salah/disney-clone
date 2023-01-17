@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useCallback, useEffect } from 'react'
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails }
+import { selectUserName, selectUserPhoto, setUserLoginDetails }
 	from '../features/user/userSlice';
 import { auth, provider, signInWithPopup } from '../firebase';
-
+import { useNavigate } from 'react-router-dom';
 import logo from '../images/logo.svg';
 import home from '../images/home-icon.svg';
 import search from '../images/search-icon.svg';
@@ -15,13 +15,29 @@ import series from '../images/series-icon.svg';
 
 
 const Header = props => {
-
-	const user = useSelector(state => state.user);
 	const userName = useSelector(selectUserName);
-	const email = useSelector(selectUserEmail);
 	const photo = useSelector(selectUserPhoto);
 
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
+	const setUser = useCallback(user => {
+		dispatch(setUserLoginDetails({
+			name: user.displayName,
+			email: user.email,
+			photo: user.photoURL,
+		})
+		);
+	}, [dispatch]);
+
+	useEffect(() => {
+		auth.onAuthStateChanged(async user => {
+			if (user) {
+				setUser(user);
+				navigate('/home');
+			}
+		})
+	}, [userName]);
 
 	const handleAuth = () => {
 		signInWithPopup(auth, provider).then(result => {
@@ -31,14 +47,6 @@ const Header = props => {
 		});
 	}
 
-	const setUser = user => {
-		dispatch(setUserLoginDetails({
-			name: user.displayName,
-			email: user.email,
-			photo: user.photoURL,
-		})
-		);
-	}
 	return (
 		<Nav>
 			<Logo>
@@ -46,7 +54,8 @@ const Header = props => {
 			</Logo>
 
 			{
-				!userName ? (<Login onClick={handleAuth}>login</Login>) :
+				!userName ?
+					<Login onClick={handleAuth}>login</Login> :
 					<Fragment>
 						<NavMenu>
 							<a>
