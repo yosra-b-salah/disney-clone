@@ -3,11 +3,13 @@ import styled from "styled-components";
 import bkgImage from "../images/home-background.png";
 import ImgSlider from "./ImgSlider";
 import Viewers from './Viewers';
+import Recommends from './Recommends';
 const Home = () => {
 	return (
 		<Container>
 			<ImgSlider />
 			<Viewers />
+			<Recommends />
 		</Container>
 	)
 }
