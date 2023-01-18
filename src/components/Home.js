@@ -2,10 +2,12 @@ import React from 'react'
 import styled from "styled-components";
 import bkgImage from "../images/home-background.png";
 import ImgSlider from "./ImgSlider";
+import Viewers from './Viewers';
 const Home = () => {
 	return (
 		<Container>
 			<ImgSlider />
+			<Viewers />
 		</Container>
 	)
 }
