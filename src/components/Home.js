@@ -12,7 +12,7 @@ const Home = () => {
 
 const Container = styled.div`
 	position: relative;
-	min-height: calc(100vh -250px);
+	min-height: calc(100vh - 250px);
 	overflow-x: hidden;
 	display: block; 
 	top: 72px;
