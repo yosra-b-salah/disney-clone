@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from "styled-components";
-import bkgImage from "../images/home-background.png";
+import { useDispatch, useSelector } from 'react-redux';
+import db, { collection, getDocs } from "../firebase";
+import { setMovies } from "../features/movie/movieSlice";
+import { selectUserName } from "../features/user/userSlice";
+
 import ImgSlider from "./ImgSlider";
 import Viewers from './Viewers';
 import Recommends from './Recommends';
@@ -8,7 +12,70 @@ import NewDisney from './NewDisney';
 import Originals from './Originals';
 import Trending from './Trending';
 
+import bkgImage from "../images/home-background.png";
+
 const Home = () => {
+	const dispatch = useDispatch();
+	const userName = useSelector(selectUserName);
+
+
+
+
+	useEffect(() => {
+		let recommend = [];
+		let newDisney = [];
+		let original = [];
+		let trending = [];
+		function fetchData() {
+			try {
+				return new Promise(async (resolve, reject) => {
+					const querySnapshot = await getDocs(collection(db, "movies"));
+					querySnapshot.forEach((doc) => {
+						switch (doc.data().type) {
+							case "recommend": {
+								recommend.push({ id: doc.id, ...doc.data() });
+								break;
+							}
+							case "new": {
+								newDisney.push({ id: doc.id, ...doc.data() });
+								break;
+							}
+							case "original": {
+								original.push({ id: doc.id, ...doc.data() });
+								break;
+							}
+							case "trending": {
+								trending.push({ id: doc.id, ...doc.data() });
+								break;
+							}
+							default: break;
+						}
+					});
+					resolve(200)
+				})
+			} catch (e) {
+				console.error("Error fetching data", e);
+			}
+		}
+		fetchData().then(() => {
+			console.log(
+				{
+					recommend,
+					newDisney,
+					original,
+					trending
+				}
+			)
+			dispatch(setMovies({
+				recommend,
+				newDisney,
+				original,
+				trending
+			}))
+
+		})
+	}, [dispatch])
+
 	return (
 		<Container>
 			<ImgSlider />
