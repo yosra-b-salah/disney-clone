@@ -21,6 +21,7 @@ const Home = () => {
 
 
 
+
 	useEffect(() => {
 		let recommend = [];
 		let newDisney = [];
@@ -58,14 +59,6 @@ const Home = () => {
 			}
 		}
 		fetchData().then(() => {
-			console.log(
-				{
-					recommend,
-					newDisney,
-					original,
-					trending
-				}
-			)
 			dispatch(setMovies({
 				recommend,
 				newDisney,
