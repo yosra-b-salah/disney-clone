@@ -1,11 +1,11 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+import { } from "firebase/firestore";
 
 const firebaseConfig = {
 	//TODO: add apiKey
-
 	authDomain: "disneyplus-clone-f3c1d.firebaseapp.com",
 	projectId: "disneyplus-clone-f3c1d",
 	storageBucket: "disneyplus-clone-f3c1d.appspot.com",
@@ -19,7 +19,7 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const storage = getStorage(app);
 
-export { auth, provider, storage, signInWithPopup };
+export { auth, provider, storage, signInWithPopup, collection, getDocs, doc, getDoc };
 export default db;
 
 

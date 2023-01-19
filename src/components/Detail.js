@@ -1,20 +1,39 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
-
+import { useParams } from "react-router-dom";
+import db, { doc, getDoc } from "../firebase"
 import imgPlayBlack from "../images/play-icon-black.png";
 import imgPlayWhite from "../images/play-icon-white.png";
 import iconGroup from "../images/group-icon.png"
 
 const Detail = (props) => {
+	const { id } = useParams();
+	const [detailData, setDetailData] = useState({});
+
+	useEffect(() => {
+		async function fetchData() {
+			const docRef = doc(db, "movies", id);
+			const docSnap = await getDoc(docRef);
+			console.log("Document data:", docSnap.data());
+			if (docSnap.exists()) {
+				setDetailData(docSnap.data())
+
+			} else {
+				// doc.data() will be undefined in this case
+				console.log("No such document!");
+			}
+		}
+		fetchData();
+
+	}, [id]);
+
 	return (
 		<Container>
 			<Background>
-				<img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/FA1548A6B82C9991B1D38DF251A388FEA2483904510FBC73E150F67F7BDE38C0/scale?width=1440&aspectRatio=1.78&format=jpeg"
-					alt='' />
+				<img src={detailData.backgroundImg} alt={detailData.title} />
 			</Background>
 			<ImageTitle>
-				<img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/F70235E3463A6F246EB462ED5379F9D41D6318E80098BD40900E7AFC1C7D932D/scale?width=1440&aspectRatio=1.78"
-					alt='' />
+				<img src={detailData.titleImg} alt={detailData.title} />
 			</ImageTitle>
 			<ContentMeta>
 				<Controls>
@@ -36,8 +55,8 @@ const Detail = (props) => {
 						</div>
 					</GroupWatch>
 				</Controls>
-				<SubTitle>2010 • 1h 40m • Family, Fantasy, Animation, Action-Adventure, Musical</SubTitle>
-				<Description>When the kingdom's most wanted bandit is taken hostage by Rapunzel — a teen with 70 feet of golden hair who's looking to escape the tower where she's been locked away for years — the unlikely duo sets off on a hair-raising escapade.</Description>
+				<SubTitle> {detailData.subTitle} </SubTitle>
+				<Description>{detailData.description}</Description>
 			</ContentMeta>
 		</Container>
 	)
