@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectUserName, selectUserPhoto, setUserLoginDetails, setSignOutState }
 	from '../features/user/userSlice';
 import { auth, provider, signInWithPopup } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../images/logo.svg';
 import home from '../images/home-icon.svg';
 import search from '../images/search-icon.svg';
@@ -69,10 +69,10 @@ const Header = props => {
 					<Login onClick={handleAuth}>login</Login> :
 					<Fragment>
 						<NavMenu>
-							<a>
+							<Link to="home">
 								<img src={home} alt="HOME" />
 								<span>Home</span>
-							</a>
+							</Link>
 							<a>
 								<img src={search} alt="SEARCH" />
 								<span>SEARCH</span>
